@@ -165,7 +165,7 @@ def info_test():
 
             # 症例数が前回取り込んだ数と同じになるまで実行
             if count_num != old and old != "":
-                memory += f"{count_num} {man_old} {area}\n"
+                memory += f"{count_num}|{man_old}|{area}\n"
                 # 保健所管内の人数を計算
                 if area in place:
                     place[area] += 1
