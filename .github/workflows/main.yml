@@ -47,4 +47,4 @@ jobs:
         run: |
           git add .
           git commit -m "Add Text" -a
-          git push origin head
+          git push origin master
