@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 from linebot import LineBotApi
 from linebot.models import TextSendMessage
+import json
 import os
 import requests
 
@@ -191,7 +192,7 @@ def info_test():
 
 
 if __name__ == "__main__":
-    # mess = "おはようございます。\n秋田コロナ感染者情報の作成者のJunです。\n\n昨日は誤った情報をお送りしてしまい申し訳ございませんでした。\n人数計算を追加した際のバグが原因でした。現在は修正を行い、最後にお送りした内容が正しい情報となりますのでご確認ください。\n\nまた、なにか不具合、お問い合わせなどある際には jun.mermaid.voice@gmail.com までご連絡をお願いします。"
-    # send_me_message(mess)
+    mess = "おはようございます。\n秋田コロナ感染者情報の作成者のJunです。\n\n昨日は誤った情報をお送りしてしまい申し訳ございませんでした。\n人数計算を追加した際のバグが原因でした。現在は修正を行い、最後にお送りした内容が正しい情報となりますのでご確認ください。\n\nまた、なにか不具合、お問い合わせなどある際には jun.mermaid.voice@gmail.com までご連絡をお願いします。"
+    send_me_message(mess)
     # send_message(mess)
-    info_test()
+    # info_test()
