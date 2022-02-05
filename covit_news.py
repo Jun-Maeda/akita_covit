@@ -63,8 +63,8 @@ def send_me_message(talk):
     # line_bot_api.broadcast(messages=message)
 
 
-# 感染者情報が更新されたら通知
-def info_get():
+# 前のサイト情報感染者情報が更新されたら通知
+def befor_info_get():
     url = "https://www.pref.akita.lg.jp/pages/archive/47957"
     res = requests.get(url)
     soup = BeautifulSoup(res.text, "html.parser")
@@ -124,10 +124,11 @@ def info_get():
         # 最後にURLを送る内容に保存してメッセージを送信
         message = memory + total_sum + total + url
         send_message(message)
+        # send_me_message(message)
 
 
 # テスト用として実行して通知させない
-def info_test():
+def befor_info_test():
     url = "https://www.pref.akita.lg.jp/pages/archive/47957"
     res = requests.get(url)
     soup = BeautifulSoup(res.text, "html.parser")
@@ -160,6 +161,13 @@ def info_test():
             count_num = data.select("td")[0].get_text()
             man_old = data.select("td")[2].get_text()
             area = data.select("td")[4].get_text()
+            print(count_num)
+            print(old)
+            if count_num == old:
+                print("OK")
+            else:
+                print("NO")
+            print("---------------")
 
             # 症例数が前回取り込んだ数と同じになるまで実行
             if count_num != old and old != "":
@@ -186,11 +194,112 @@ def info_test():
 
         # 内容を保存してメッセージを表示
         message = memory + total_sum + total + url
+        # print(message)
+
+
+def info_test():
+    url = "https://www.pref.akita.lg.jp/pages/archive/47957"
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, "html.parser")
+    old_file = "covit_info.txt"
+
+    # 今回取り込んだ情報を取り出す
+    new_elem = soup.select(
+        "#top > div.l-site-container > main > article > div > div.p-page-body > table:nth-child(11)")
+
+    # 項目と保健所名を取得
+    head = new_elem[0].select("thead")[0]
+    # 人数などの情報を取得
+    foot = new_elem[0].select("tbody")[0]
+    # footから日付のみ取得
+    day = foot.select("td")[0].get_text()
+
+    # 前回のデータを取り込む
+    try:
+        with open(old_file) as f:
+            old = f.read()
+    except:
+        old = ""
+
+    # 前回取り込んだ症例数と違う場合のみ実行
+    if day == old:
+        print("same")
+        # return False
+    else:
+        # 送る内容を辞書に保存する
+        memory = {}
+
+        c_kind = head.select("th")
+        c_count = foot .select("td")
+
+        for i in range(len(c_kind)):
+            key = c_kind[i].get_text()
+            val = c_count[i].get_text()
+            memory[key] = val
+
+        message = ""
+        for key, val in memory.items():
+            message += f"{key} : {val}\n"
         print(message)
+
+        # 更新された番号を保存
+        with open(old_file, "w") as f:
+            f.write(day)
+
+
+def info_get():
+    url = "https://www.pref.akita.lg.jp/pages/archive/47957"
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, "html.parser")
+    old_file = "covit_info.txt"
+
+    # 今回取り込んだ情報を取り出す
+    new_elem = soup.select(
+        "#top > div.l-site-container > main > article > div > div.p-page-body > table:nth-child(11)")
+
+    # 項目と保健所名を取得
+    head = new_elem[0].select("thead")[0]
+    # 人数などの情報を取得
+    foot = new_elem[0].select("tbody")[0]
+    # footから日付のみ取得
+    day = foot.select("td")[0].get_text()
+
+    # 前回のデータを取り込む
+    try:
+        with open(old_file) as f:
+            old = f.read()
+    except:
+        old = ""
+
+    # 前回取り込んだ症例数と違う場合のみ実行
+    if day == old:
+        return False
+    else:
+        # 送る内容を辞書に保存する
+        memory = {}
+
+        c_kind = head.select("th")
+        c_count = foot .select("td")
+
+        for i in range(len(c_kind)):
+            key = c_kind[i].get_text()
+            val = c_count[i].get_text()
+            memory[key] = val
+
+        message = ""
+        for key, val in memory.items():
+            message += f"{key} : {val}\n"
+
+        # 更新された番号を保存
+        with open(old_file, "w") as f:
+            f.write(day)
+
+        send_message(message)
+        # send_me_message(message)
 
 
 if __name__ == "__main__":
     mess = "おはようございます。\n秋田コロナ感染者情報の作成者のJunです。\n\n昨日は誤った情報をお送りしてしまい申し訳ございませんでした。\n人数計算を追加した際のバグが原因でした。現在は修正を行い、最後にお送りした内容が正しい情報となりますのでご確認ください。\n\nまた、なにか不具合、お問い合わせなどある際には jun.mermaid.voice@gmail.com までご連絡をお願いします。"
     # send_me_message(mess)
     # send_message(mess)
-    # info_get()
+    info_get()
