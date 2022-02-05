@@ -193,7 +193,7 @@ def info_test():
             message = memory + total_sum + total + url
             print(message)
     except:
-        send_me_message("うまく取得できてません")
+        print("うまく取得できてません")
 
 
 if __name__ == "__main__":
