@@ -72,7 +72,7 @@ def info_get():
 
     # 今回取り込んだ情報を取り出す
     new_elem = soup.select(
-        "#top > div.l-site-container > main > article > div > div.p-page-body > table > tbody")
+        "#top > div.l-site-container > main > article > div > div.p-page-body > div:nth-child(10) > table > tbody")
 
     # 前回のデータを取り込む
     try:
@@ -137,7 +137,7 @@ def info_test():
 
     # 今回取り込んだ情報を取り出す
     new_elem = soup.select(
-        "#top > div.l-site-container > main > article > div > div.p-page-body > table > tbody")
+        "#top > div.l-site-container > main > article > div > div.p-page-body > div:nth-child(10) > table > tbody")
 
     # 前回のデータを取り込む
     try:
@@ -193,6 +193,6 @@ def info_test():
 
 if __name__ == "__main__":
     mess = "おはようございます。\n秋田コロナ感染者情報の作成者のJunです。\n\n昨日は誤った情報をお送りしてしまい申し訳ございませんでした。\n人数計算を追加した際のバグが原因でした。現在は修正を行い、最後にお送りした内容が正しい情報となりますのでご確認ください。\n\nまた、なにか不具合、お問い合わせなどある際には jun.mermaid.voice@gmail.com までご連絡をお願いします。"
-    send_me_message(mess)
+    # send_me_message(mess)
     # send_message(mess)
-    # info_test()
+    info_test()
