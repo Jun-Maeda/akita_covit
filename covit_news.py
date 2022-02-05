@@ -46,21 +46,21 @@ def send_message(talk):
     line_bot_api.broadcast(messages=message)
 
 
-# 自分にだけメッセージを送る
-def send_me_message(talk):
-    # メッセージ送信用に変換
-    message = TextSendMessage(text=talk)
-    # jsonファイルを読み込む
-    file = open('info.json', 'r')
-    info = json.load(file)
-    access_token = info["CHANNEL_ACCESS_TOKEN"]
-    user_id = info["USER_ID"]
-    # LINEbotにトークンを入力
-    line_bot_api = LineBotApi(access_token)
-    # LINEbotでメッセージを送る
-    line_bot_api.push_message(user_id, messages=message)
-    # bot友達の全員に送信
-    # line_bot_api.broadcast(messages=message)
+# # 自分にだけメッセージを送る
+# def send_me_message(talk):
+#     # メッセージ送信用に変換
+#     message = TextSendMessage(text=talk)
+#     # jsonファイルを読み込む
+#     file = open('info.json', 'r')
+#     info = json.load(file)
+#     access_token = info["CHANNEL_ACCESS_TOKEN"]
+#     user_id = info["USER_ID"]
+#     # LINEbotにトークンを入力
+#     line_bot_api = LineBotApi(access_token)
+#     # LINEbotでメッセージを送る
+#     line_bot_api.push_message(user_id, messages=message)
+#     # bot友達の全員に送信
+#     # line_bot_api.broadcast(messages=message)
 
 
 # 感染者情報が更新されたら通知
@@ -127,7 +127,7 @@ def info_get():
             send_message(message)
             # print(message)
     except:
-        send_me_message("うまく取得できていません。")
+        print("うまく取得できていません。")
 
 
 # テスト用として実行して通知させない
