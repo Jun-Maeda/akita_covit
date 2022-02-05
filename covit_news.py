@@ -70,125 +70,130 @@ def info_get():
     soup = BeautifulSoup(res.text, "html.parser")
     old_file = "covit_info.txt"
 
-    # 今回取り込んだ情報を取り出す
-    new_elem = soup.select(
-        "#top > div.l-site-container > main > article > div > div.p-page-body > div:nth-child(10) > table > tbody")
-
-    # 前回のデータを取り込む
     try:
-        with open(old_file) as f:
-            old = f.read()
-    except:
-        old = ""
+        # 今回取り込んだ情報を取り出す
+        new_elem = soup.select(
+            "#top > div.l-site-container > main > article > div > div.p-page-body > div:nth-child(10) > table > tbody")
 
-    # スクレイピングデータの取得
-    datas = new_elem[0].select("tr")
-    # 一番最初の症例数のみ取得
-    first_data = datas[0].select("td")[0].get_text()
+        # 前回のデータを取り込む
+        try:
+            with open(old_file) as f:
+                old = f.read()
+        except:
+            old = ""
 
-    # 前回取り込んだ症例数と違う場合のみ実行
-    if first_data == old:
-        return False
-    else:
-        # 送る内容を保存する
-        memory = ""
-        place = {}
-        for data in datas:
-            count_num = data.select("td")[0].get_text()
-            man_old = data.select("td")[2].get_text()
-            area = data.select("td")[4].get_text()
+        # スクレイピングデータの取得
+        datas = new_elem[0].select("tr")
+        # 一番最初の症例数のみ取得
+        first_data = datas[0].select("td")[0].get_text()
 
-            # 症例数が前回取り込んだ数と同じになるまで実行
-            if count_num != old and old != "":
-                memory += f"{count_num}|{man_old}|{area}\n"
-                # 保健所管内の人数を計算
-                if area in place:
-                    place[area] += 1
+        # 前回取り込んだ症例数と違う場合のみ実行
+        if first_data == old:
+            return False
+        else:
+            # 送る内容を保存する
+            memory = ""
+            place = {}
+            for data in datas:
+                count_num = data.select("td")[0].get_text()
+                man_old = data.select("td")[2].get_text()
+                area = data.select("td")[4].get_text()
+
+                # 症例数が前回取り込んだ数と同じになるまで実行
+                if count_num != old and old != "":
+                    memory += f"{count_num}|{man_old}|{area}\n"
+                    # 保健所管内の人数を計算
+                    if area in place:
+                        place[area] += 1
+                    else:
+                        place[area] = 1
                 else:
-                    place[area] = 1
-            else:
-                break
+                    break
 
-        # 更新された番号を保存
-        with open(old_file, "w") as f:
-            f.write(first_data)
+            # 更新された番号を保存
+            with open(old_file, "w") as f:
+                f.write(first_data)
 
-        # トータルの人数を出力
-        total = ""
-        total_sum = 0
-        for k, v in place.items():
-            total += f"{k}:{v}人\n"
-            total_sum += v
-        total_sum = f"\n秋田県内合計：{str(total_sum)}人\n"
+            # トータルの人数を出力
+            total = ""
+            total_sum = 0
+            for k, v in place.items():
+                total += f"{k}:{v}人\n"
+                total_sum += v
+            total_sum = f"\n秋田県内合計：{str(total_sum)}人\n"
 
-        # 最後にURLを送る内容に保存してメッセージを送信
-        message = memory + total_sum + total + url
-        send_message(message)
-        # print(message)
+            # 最後にURLを送る内容に保存してメッセージを送信
+            message = memory + total_sum + total + url
+            send_message(message)
+            # print(message)
+    except:
+        send_me_message("うまく取得できていません。")
+
 
 # テスト用として実行して通知させない
-
-
 def info_test():
     url = "https://www.pref.akita.lg.jp/pages/archive/47957"
     res = requests.get(url)
     soup = BeautifulSoup(res.text, "html.parser")
     old_file = "covit_info.txt"
 
-    # 今回取り込んだ情報を取り出す
-    new_elem = soup.select(
-        "#top > div.l-site-container > main > article > div > div.p-page-body > div:nth-child(10) > table > tbody")
-
-    # 前回のデータを取り込む
     try:
-        with open(old_file) as f:
-            old = f.read()
-    except:
-        old = ""
+        # 今回取り込んだ情報を取り出す
+        new_elem = soup.select(
+            "#top > div.l-site-container > main > article > div > div.p-page-body > div:nth-child(10) > table > tbody")
 
-    # スクレイピングデータの取得
-    datas = new_elem[0].select("tr")
-    # 一番最初の症例数のみ取得
-    first_data = datas[0].select("td")[0].get_text()
+        # 前回のデータを取り込む
+        try:
+            with open(old_file) as f:
+                old = f.read()
+        except:
+            old = ""
 
-    # 前回取り込んだ症例数と違う場合のみ実行
-    if first_data == old:
-        return False
-    else:
-        # 送る内容を保存する
-        memory = ""
-        place = {}
-        for data in datas:
-            count_num = data.select("td")[0].get_text()
-            man_old = data.select("td")[2].get_text()
-            area = data.select("td")[4].get_text()
+        # スクレイピングデータの取得
+        datas = new_elem[0].select("tr")
+        # 一番最初の症例数のみ取得
+        first_data = datas[0].select("td")[0].get_text()
 
-            # 症例数が前回取り込んだ数と同じになるまで実行
-            if count_num != old and old != "":
-                memory += f"{count_num}|{man_old}|{area}\n"
-                # 保健所管内の人数を計算
-                if area in place:
-                    place[area] += 1
+        # 前回取り込んだ症例数と違う場合のみ実行
+        if first_data == old:
+            return False
+        else:
+            # 送る内容を保存する
+            memory = ""
+            place = {}
+            for data in datas:
+                count_num = data.select("td")[0].get_text()
+                man_old = data.select("td")[2].get_text()
+                area = data.select("td")[4].get_text()
+
+                # 症例数が前回取り込んだ数と同じになるまで実行
+                if count_num != old and old != "":
+                    memory += f"{count_num}|{man_old}|{area}\n"
+                    # 保健所管内の人数を計算
+                    if area in place:
+                        place[area] += 1
+                    else:
+                        place[area] = 1
                 else:
-                    place[area] = 1
-            else:
-                break
+                    break
 
-        # 更新された番号を保存
-        with open(old_file, "w") as f:
-            f.write(first_data)
+            # 更新された番号を保存
+            with open(old_file, "w") as f:
+                f.write(first_data)
 
-        # トータルの人数を出力
-        total = ""
-        total_sum = 0
-        for k, v in place.items():
-            total += f"{k}:{v}人\n"
-            total_sum += v
-        total_sum = f"\n秋田県内合計：{str(total_sum)}人\n"
+            # トータルの人数を出力
+            total = ""
+            total_sum = 0
+            for k, v in place.items():
+                total += f"{k}:{v}人\n"
+                total_sum += v
+            total_sum = f"\n秋田県内合計：{str(total_sum)}人\n"
 
-        # 内容を保存してメッセージを表示
-        message = memory + total_sum + total + url
-        print(message)
+            # 内容を保存してメッセージを表示
+            message = memory + total_sum + total + url
+            print(message)
+    except:
+        send_me_message("うまく取得できてません")
 
 
 if __name__ == "__main__":
