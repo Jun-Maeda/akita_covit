@@ -255,15 +255,11 @@ def info_get():
 
     # 今回取り込んだ情報を取り出す
     new_elem = soup.select(
-        "#top > div.l-site-container > main > article > div > div.p-page-body > table:nth-child(11)")
-
-    # 項目と保健所名を取得
-    head = new_elem[0].select("thead")[0]
-    # 人数などの情報を取得
-    foot = new_elem[0].select("tbody")[0]
-    # footから日付のみ取得
-    day = foot.select("td")[0].get_text()
-
+        "#top > div.l-site-container > main > article > div > div.p-page-body > table")
+    # 表全体を取得
+    graff = new_elem[0]
+    # 最新の日付のみを取得
+    day = graff.select("td")[0].get_text()
     # 前回のデータを取り込む
     try:
         with open(old_file) as f:
@@ -278,8 +274,8 @@ def info_get():
         # 送る内容を辞書に保存する
         memory = {}
 
-        c_kind = head.select("th")
-        c_count = foot .select("td")
+        c_kind = graff.select("th")
+        c_count = graff.select("tr")[1].select("td")
 
         for i in range(len(c_kind)):
             key = c_kind[i].get_text()
@@ -299,7 +295,7 @@ def info_get():
 
 
 if __name__ == "__main__":
-    mess = "おはようございます。\n秋田コロナ感染者情報の作成者のJunです。\n\n昨日は誤った情報をお送りしてしまい申し訳ございませんでした。\n人数計算を追加した際のバグが原因でした。現在は修正を行い、最後にお送りした内容が正しい情報となりますのでご確認ください。\n\nまた、なにか不具合、お問い合わせなどある際には jun.mermaid.voice@gmail.com までご連絡をお願いします。"
+    mess = "こんばんは。\n秋田コロナ感染者情報の作成者のJunです。\n\n秋田県の感染者情報ページの大幅な改修があったため情報が取得できない状態となっておりました。\nご迷惑をおかけしてしまい申し訳ございません。現在は改修済みです。\n\nまた、なにか不具合、お問い合わせなどある際には jun.mermaid.voice@gmail.com までご連絡をお願いします。"
     # send_me_message(mess)
     # send_message(mess)
-    info_get()
+    # info_get()
